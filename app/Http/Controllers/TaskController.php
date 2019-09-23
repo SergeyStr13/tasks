@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller {
 
@@ -41,12 +42,17 @@ class TaskController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-       $this->validate($request, [
+     /*  $this->validate($request, [
        		'name' => 'required!max:255'
-	   ]);
+	   ])*/;
 
-		$request->user()->tasks()->create(['name' => $request->name]);
+		//$request->user()->tasks()->create(['name' => $request->name]);
 
+		$task = new Task([
+			'name' => $request->post('name'),
+			'user_id' => '1'
+		]);
+		$task->save();
        return redirect('/tasks');
     }
 

@@ -8,8 +8,10 @@ class Task extends Model {
 
 	protected $fillable = ['name'];
 
+	public $timestamps = false;
 
-	public function user() {
-		$this->belongsTo(User::class, 'create_user');
-	}
+
+/*	public function user() {
+		$this->belongsTo(User::class);
+	}*/
 }
