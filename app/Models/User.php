@@ -1,6 +1,7 @@
 <?php
 
-namespace App;
+namespace App\Models;
+//namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -36,4 +37,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+	public function tasks() {
+		$this->hasMany(Task::class);
+    }
 }
