@@ -12,8 +12,10 @@ class ExampleTest extends TestCase
      *
      * @return void
      */
-    public function testBasicTest()
-    {
+    public function testBasicTest() {
         $this->assertTrue(true);
+        /* $this->visit('/')
+         ->see('Laravel 5')
+         ->dontSee('Rails');*/
     }
 }

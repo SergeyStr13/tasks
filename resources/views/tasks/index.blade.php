@@ -11,9 +11,9 @@
 
       <!-- Имя задачи -->
       <div class="form-group">
-        <label for="task" class="col-sm-3 control-label">Задача</label>
+        <label for="task" class="col-sm-6 control-label">Задача</label>
 
-        <div class="col-sm-6">
+        <div class="col-sm-3">
           <input type="text" name="name" id="task-name" class="form-control">
         </div>
       </div>
@@ -27,5 +27,18 @@
         </div>
       </div>
     </form>
+	<hr>
+	<div class="container">
+		@foreach($tasks as $task)
+			<div>{{$task->name}}</div>
+			<form action="{{url('task/'.$task->id)}}" method="post">
+				{{ csrf_field() }}
+				{{ method_field('DELETE')}}
+				<button type="submit" id="delete-task-{{$task->id}}">
+					<i class="fa fa-btn fa-trash">Удалить</i>
+				</button>
+			</form>
+		@endforeach
+	</div>
   </div>
 @endsection

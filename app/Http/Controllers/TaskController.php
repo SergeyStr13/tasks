@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Repositories\TaskRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller {
 
+	protected $tasks;
 	/**
 	 * TaskController constructor.
 	 */
-	public function __construct() {
+	public function __construct(TaskRepository $tasks) {
 		$this->middleware('auth');
+		$this->tasks = $tasks;
 	}
 
 	/**
@@ -21,8 +24,10 @@ class TaskController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
-    	//$tasks = $request->user()->tasks()->get();
-		$tasks = Task::all();
+    	$tasks = $this->tasks->forUser($request->user());
+    	/* 	сделано через отношения
+    		$tasks = $request->user()->tasks()->get(); */
+		//$tasks = Task::all();
         return view('tasks.index', compact('tasks'));
    }
 
@@ -42,18 +47,21 @@ class TaskController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-     /*  $this->validate($request, [
-       		'name' => 'required!max:255'
-	   ])*/;
-
-		//$request->user()->tasks()->create(['name' => $request->name]);
-
-		$task = new Task([
-			'name' => $request->post('name'),
-			'user_id' => '1'
+     	$this->validate($request, [
+       		'name' => 'required|max:255'
+	   	]);
+		//$userId = Auth::user()->id;
+		$request->user()->tasks()->create([
+			'name' => $request->post('name')
 		]);
-		$task->save();
-       return redirect('/tasks');
+
+		/*
+		 * $task = new Task([
+			'name' => $request->post('name'),
+			'user_id' => $userId
+		]);
+		$task->save();*/
+       	return redirect('/tasks');
     }
 
     /**
@@ -93,7 +101,11 @@ class TaskController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-        //
+    public function destroy(Request $request, Task $task) {
+    	$this->authorize('destroy', $task);
+
+    	//Task::destroy($task);
+		$task->delete();
+    	return redirect('/tasks');
     }
 }
