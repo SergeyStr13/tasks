@@ -24,7 +24,7 @@ class TaskController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
-    	$tasks = $this->tasks->forUser($request->user());
+      	$tasks = $this->tasks->forUser($request->user());
     	/* 	сделано через отношения
     		$tasks = $request->user()->tasks()->get(); */
 		//$tasks = Task::all();
@@ -47,6 +47,7 @@ class TaskController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+
      	$this->validate($request, [
        		'name' => 'required|max:255'
 	   	]);
