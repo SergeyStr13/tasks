@@ -24,11 +24,11 @@ class TaskController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
-      	$tasks = $this->tasks->forUser($request->user());
+      	//$tasks = $this->tasks->forUser($request->user());
     	/* 	сделано через отношения
     		$tasks = $request->user()->tasks()->get(); */
-		//$tasks = Task::all();
-        return view('tasks.index', compact('tasks'));
+		$tasks = Task::all();
+		return view('tasks.index', compact('tasks'));
    }
 
     /**
@@ -52,9 +52,14 @@ class TaskController extends Controller {
        		'name' => 'required|max:255'
 	   	]);
 		//$userId = Auth::user()->id;
+		dd($request->file('image'));
+
 		$request->user()->tasks()->create([
-			'name' => $request->post('name')
+			'name' => $request->post('name'),
+			'image' =>$request->file('image')->store('images')
 		]);
+
+
 
 		/*
 		 * $task = new Task([
@@ -92,16 +97,22 @@ class TaskController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
-        //
+    public function update(Request $request, Task $task) {
+       /*$request->user()->tasks()->update([
+			'name' => $request->post('name'),
+			'image' =>$request->file('image')->store('images')
+		]);*/
+
+       	return redirect('/tasks');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+	/**
+	 * @param Request $request
+	 * @param Task $task
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws \Exception
+	 * @throws \Illuminate\Auth\Access\AuthorizationException
+	 */
     public function destroy(Request $request, Task $task) {
     	$this->authorize('destroy', $task);
 

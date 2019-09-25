@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Task extends Model {
 
-	protected $fillable = ['name','user_id'];
+	protected $fillable = ['name','user_id', 'image'];
 
 	//public $timestamps = false;
 
